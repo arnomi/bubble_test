@@ -9,7 +9,6 @@ defmodule BubbleTest.WebserverMock do
     quote do
       use Plug.Builder
 
-      plug Plug.Session, store: :ets, key: "_my_app_session", table: :session
       plug(unquote(main_plug))
 
       def init(opts) do

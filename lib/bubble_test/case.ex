@@ -1,6 +1,41 @@
 defmodule BubbleTest.Case do
   @moduledoc """
+  Provides an `ExUnit` test case for "bubble" testing microservices. A test case
+  allows to set up mocks for external systems the microservice expects. Currently
+  available for mocking are
 
+  - Webserver
+
+  Following is an example test case which sets up two mock webservers. The webservers
+  are controlled by mock implementations (in the case of webservers these should be plugs).
+
+      defmodule System1Mock do
+        use Plug.Router
+
+        plug(:match)
+        plug(:dispatch)
+
+        get "/hello/:name" do
+          send_resp(conn, 200, name)
+        end
+      end
+
+      defmodule System2Mock do
+        use Plug.Router
+        # ...
+      end
+
+      test_system "we can start mock webservers for system testing", mocks: [
+              webserver: [port: 12345, mock: System1Mock, name: HTTP1],
+              webserver: [port: 23456, mock: System2Mock, name: HTTP2]
+            ] do
+          # interact with the microservice
+      end
+
+  Any request that is made to one of the mock servers is forwarded to the test case which
+  can assert on it.
+
+      assert_receive({:web_request, HTTP1, %{request_path: "/hello/system1"}}, 1000)
   """
 
   defmacro __using__(_opts \\ []) do

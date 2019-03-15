@@ -2,6 +2,8 @@
 
 Simple proof of concept for a microservice test framework that mocks the surroundings of the microservice.
 
+See `BubbleTest.Case` for further documentation on how to use BubbleTest.
+
 ## Installation
 
 If [available in Hex](https://hex.pm/docs/publish), the package can be installed
